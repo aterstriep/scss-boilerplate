@@ -1,14 +1,14 @@
 @mixin button {
     padding: 8px 20px;
-    border: 2px solid;
     background-color: $action;
+    border: 2px solid $action;
     color: white;
     border-radius: 4px;
     font-size: 14px;
     text-transform: uppercase;
     letter-spacing: .5px;
     font-weight: 600;
-    text-transform: none;
+    text-transform: uppercase;
 
     &:hover {
         background-color: $secondary;
@@ -19,4 +19,9 @@ button,
 input[type="submit"],
 a.button {
     @include button;
+
+    &.button_small {
+        padding: 4px 12px;
+        font-size: 12px;
+    }
 }
