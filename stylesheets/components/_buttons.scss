@@ -1,27 +1,207 @@
-@mixin button {
-    padding: 8px 20px;
-    background-color: $action;
-    border: 2px solid $action;
-    color: white;
+/*
+* Directions with opposite
+*/
+
+$directions:
+    left right,
+    right left,
+    top bottom,
+    bottom top;
+
+/*
+* Standard button
+*/ 
+
+@mixin button($bgc: $action, $color: white) {
+    padding: 6px 20px;
+    background-color: $bgc;
+    border: 2px solid $bgc;
+    color: $color;
     border-radius: 4px;
     font-size: 14px;
     text-transform: uppercase;
     letter-spacing: .5px;
     font-weight: 600;
     text-transform: uppercase;
+    text-decoration: none;
+    display: inline-block;
+    transition: .25s ease all;
 
     &:hover {
-        background-color: $secondary;
+        color: $color;
+        background-color: darken($bgc, 5%);
+        border-color: darken($bgc, 5%);
     }
 }
 
 button,
 input[type="submit"],
-a.button {
+.btn {
     @include button;
 
-    &.button_small {
+    // Secondary
+    &.btn_secondary {
+        background-color: $primary;
+        border-color: $primary;
+
+        &:hover {
+            background-color: darken($primary, 5%);
+            border-color: darken($primary, 5%);
+        }
+    }
+
+    // Small
+    &.btn_small {
         padding: 4px 12px;
         font-size: 12px;
+
+        &.btn_slide {
+            padding: 6px 14px;
+        }
     }
+
+    // White background
+    &.btn_white {
+        background-color: white;
+        color: $action;
+        border-color: white;
+
+        &:hover {
+            background-color: $action;
+            color: white;
+            border-color: $action;
+        }
+    }
+}
+
+/*
+* White version of standard button
+*/
+
+.btn_white {
+    background-color: white;
+    color: $action;
+    border-color: white;
+
+    &:hover {
+        background-color: $action;
+        color: white;
+        border-color: $action;
+    }
+}
+
+/*
+* Small
+* Small version of standard button
+*/
+
+.btn_small {
+    padding: 4px 12px;
+    font-size: 12px;
+
+    &.btn_slide {
+        padding: 6px 14px;
+    }
+}
+
+/*
+* Slide
+* Hover color slides towards specified direction
+*/ 
+
+@mixin buttonSlide($direction: right, $bgc: $action, $hoverbg: $primary, $color: white, $hoverColor: white) {
+    background-position: $direction;
+    background-image: linear-gradient(to $direction, $hoverbg 50%, $bgc 50%);
+    color: $color;
+
+    @if $direction == right or $direction == left {
+        background-size: 200% 100%;
+    }
+
+    @if $direction == top or $direction == bottom {
+        background-size: 100% 200%;
+    }
+
+    &:hover {
+        color: $hoverColor;
+    }
+}
+
+.btn_slide {
+    padding: 8px 22px;
+    border: none;
+}
+
+@each $direction, $hoverDirection in $directions {
+    .btn_slide-#{$direction} {
+        @include buttonSlide($direction);
+        &:hover {
+            background-position: $hoverDirection;
+        }
+    }
+}
+
+/*
+* Border
+* Add border to one or all sides
+*/
+
+@mixin buttonBorder($side: left, $width: 4px, $color: $action, $hoverColor: $primary) {
+    background-color: transparent;
+    color: $action;
+    border-radius: 0;
+    border: none;
+    border-#{$side}: $width solid $color;
+
+    &:hover {
+        background: inherit;
+        color: $hoverColor;
+        border-color: $hoverColor;
+    }
+}
+
+.btn_border {
+    background-color: transparent;
+    border: 2px solid inherit;
+    color: $action;
+
+    &.btn_white {
+        border-color: white;
+        color: white;
+
+        &:hover {
+            background-color: white;
+            color: $action;
+        }
+    }
+}
+
+@each $direction, $opp in $directions {
+    .btn_border-#{$direction} {
+        @include buttonBorder($direction);
+
+        // Slide background with border
+        &.btn_slide-#{$opp} {
+            @include buttonSlide($opp, transparent, $action, $action, white);
+            &:hover {
+                background-position: $direction;
+                border-color: $action;
+            }
+        }
+    }
+}
+
+/*
+* Grow
+* Scale button on hover
+*/
+
+@mixin buttonGrow($scale: 1.05) {
+    &:hover {
+        transform: scale($scale);
+    }
+}
+
+.btn_grow {
+    @include buttonGrow;
 }

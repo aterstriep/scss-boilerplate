@@ -1,19 +1,5 @@
 // mixins
 
-@mixin bgImage($position: center) {
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-position: $position;
-}
-
-@mixin cover {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-}
-
 @mixin clearList {
   list-style: none;
   padding: 0;
@@ -22,7 +8,6 @@
 .clearlist {
   @include clearList;
 }
-
 
 // responsive breakpoints
 @mixin breakpoint($breakpoint) {
